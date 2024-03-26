@@ -1,0 +1,6 @@
+- id: trivyconfig
+  name: Trivy
+  description: "Trivy vulnerability scanner hook."
+  entry: hooks/trivy-config.sh
+  language: script
+  types: [file]
