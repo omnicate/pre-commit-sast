@@ -1,0 +1,43 @@
+# Example pre-commit-config.yaml that can be added to your repo
+repos:
+  # SAST: Configuration
+  - repo: https://github.com/jonny-wg2/pre-commit-sast
+    rev: v0.0.1
+    hooks:
+      - id: trivyconfig
+        args:
+          - "--args=--severity HIGH,CRITICAL"
+          - "--args=--ignorefile .trivyignore"
+
+  # SAST: Semgrep
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.23.0
+    hooks:
+      - id: semgrep
+        name: "SAST:semgrep-ci (exclude findings with commenting) [# nosemgrep]"
+        exclude: ".+test.+$|.+presentations.+$"
+        args: [
+            "--config=p/ci", # --config=p/owasp-top-ten
+            "--severity=ERROR", # info, warning, or error
+            "--exclude-rule=go.grpc.security.grpc-server-insecure-connection.grpc-server-insecure-connection",
+            "--error", # Exit 1 if there are findings
+          ]
+        types_or:
+          [
+            javascript,
+            go,
+            python,
+            java,
+            kotlin,
+            ts,
+            bash,
+            terraform,
+            dockerfile,
+          ]
+        stages: [commit]
+
+  # SAST: Erlang Pest https://github.com/okeuday/pest
+  - repo: https://github.com/omnicate/pre-commit-erlang-pest
+    rev: v1.0.4
+    hooks:
+      - id: pest
