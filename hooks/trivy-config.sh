@@ -27,13 +27,13 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-OVERALL_EXIT_STATUS=0
-
-# Check for ionice once before the loop
-if command -v ionice >/dev/null 2>&1; then
-    # Run the entire loop under ionice
+if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
+    # Set the flag and re-execute under ionice
+    export IONICE_RUNNING=1
     exec ionice -c 2 -n 7 "$0" "$@"
 fi
+
+OVERALL_EXIT_STATUS=0
 
 # Remaining arguments are treated as files
 for file in "$@"; do
