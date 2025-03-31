@@ -29,12 +29,22 @@ done
 
 OVERALL_EXIT_STATUS=0
 
+# Check for ionice once before the loop
+USE_IONICE=0
+if command -v ionice >/dev/null 2>&1; then
+    USE_IONICE=1
+fi
+
 # Remaining arguments are treated as files
 for file in "$@"; do
     if [[ -f "$file" ]]; then
         echo "Scanning file: $file"
         EXIT_STATUS=0
-        trivy conf $TRIVY_ARGS --exit-code 1 "$file" || EXIT_STATUS=$?
+        if [ "$USE_IONICE" -eq 1 ]; then
+            ionice -c 2 -n 7 trivy conf $TRIVY_ARGS --exit-code 1 "$file" || EXIT_STATUS=$?
+        else
+            trivy conf $TRIVY_ARGS --exit-code 1 "$file" || EXIT_STATUS=$?
+        fi
         if [ "$EXIT_STATUS" -ne 0 ]; then
             OVERALL_EXIT_STATUS=$EXIT_STATUS
         fi
