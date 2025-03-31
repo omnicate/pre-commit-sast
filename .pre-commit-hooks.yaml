@@ -1,6 +1,6 @@
 - id: trivyconfig
   name: Trivy
   description: "Trivy vulnerability scanner hook."
-  entry: hooks/trivy-config.sh
+  entry: ionice -c 2 -n 7 hooks/trivy-config.sh
   language: script
   types: [file]
