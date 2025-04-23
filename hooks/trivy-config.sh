@@ -35,12 +35,19 @@ fi
 
 OVERALL_EXIT_STATUS=0
 
+# Ensure the cache is valid and clear it if not
+# See also: https://iot-controlcenter.atlassian.net/browse/INF-481
+if ! [[ -e "${HOME}/.cache/trivy/policy/content" ]]
+then
+    trivy clean --all
+fi
+
 # Remaining arguments are treated as files
 for file in "$@"; do
     if [[ -f "$file" ]]; then
         echo "Scanning file: $file"
         EXIT_STATUS=0
-        trivy conf $TRIVY_ARGS --exit-code 1 "$file" || EXIT_STATUS=$?
+        trivy conf "$TRIVY_ARGS" --exit-code 1 "$file" || EXIT_STATUS=$?
         if [ "$EXIT_STATUS" -ne 0 ]; then
             OVERALL_EXIT_STATUS=$EXIT_STATUS
         fi
