@@ -47,7 +47,8 @@ for file in "$@"; do
     if [[ -f "$file" ]]; then
         echo "Scanning file: $file"
         EXIT_STATUS=0
-        trivy conf "$TRIVY_ARGS" --exit-code 1 "$file" || EXIT_STATUS=$?
+        # shellcheck disable=SC2086
+        trivy conf $TRIVY_ARGS --exit-code 1 "$file" || EXIT_STATUS=$?
         if [ "$EXIT_STATUS" -ne 0 ]; then
             OVERALL_EXIT_STATUS=$EXIT_STATUS
         fi
