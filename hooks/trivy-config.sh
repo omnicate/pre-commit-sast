@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Initialize a variable for additional Trivy arguments
-TRIVY_ARGS=""
-
 # Function to add arguments to TRIVY_ARGS
 add_arg() {
     local key=$1
@@ -10,27 +7,32 @@ add_arg() {
     TRIVY_ARGS+=" $key $value"
 }
 
-# Loop through arguments to build TRIVY_ARGS
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --args=*)
-            IFS='=' read -r _ value <<< "$1"
-            # Split the value into two parts: key and value
-            IFS=' ' read -r key arg_value <<< "$value"
-            add_arg "$key" "$arg_value"
-            ;;
-        *)
-            # Assume it's a file path
-            break
-            ;;
-    esac
-    shift
-done
-
 if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
+    # Initialize a variable for additional Trivy arguments
+    TRIVY_ARGS=""
+
+    # Loop through arguments to build TRIVY_ARGS
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --args=*)
+                IFS='=' read -r _ value <<< "$1"
+                # Split the value into two parts: key and value
+                IFS=' ' read -r key arg_value <<< "$value"
+                add_arg "$key" "$arg_value"
+                ;;
+            *)
+                # Assume it's a file path
+                break
+                ;;
+        esac
+        shift
+    done
+
+    echo "Running with TRIVY_ARGS: ${TRIVY_ARGS}"
+
     # Set the flag and re-execute under ionice
     export IONICE_RUNNING=1
-    exec ionice -c 2 -n 7 "$0" "$@"
+    exec env TRIVY_ARGS="$TRIVY_ARGS" ionice -c 2 -n 7 "$0" "$@"
 fi
 
 OVERALL_EXIT_STATUS=0
