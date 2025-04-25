@@ -7,7 +7,8 @@ add_arg() {
     TRIVY_ARGS+=" $key $value"
 }
 
-if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
+if [[ -z "${IONICE_RUNNING}" ]]
+then
     # Initialize a variable for additional Trivy arguments
     TRIVY_ARGS=""
 
@@ -29,7 +30,9 @@ if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
     done
 
     echo "Running with TRIVY_ARGS: ${TRIVY_ARGS}"
+fi
 
+if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
     # Set the flag and re-execute under ionice
     export IONICE_RUNNING=1
     exec env TRIVY_ARGS="$TRIVY_ARGS" ionice -c 2 -n 7 "$0" "$@"
