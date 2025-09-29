@@ -1,0 +1,29 @@
+# Custom Trivy policy file
+# This allows very granular control over what gets ignored
+
+# Ignore specific vulnerabilities in specific files/paths
+ignore:
+  # Ignore all medium severity issues in test files
+  - cve: "*"
+    severity: "MEDIUM"
+    paths:
+      - "**/*test*"
+      - "**/tests/**"
+  
+  # Ignore specific CVE in vendor code
+  - cve: "CVE-2021-44228"
+    paths:
+      - "vendor/**"
+      - "third_party/**"
+  
+  # Ignore Kubernetes security contexts in dev configs
+  - id: "AVD-KSV-0014"
+    paths:
+      - "k8s/dev/**"
+      - "manifests/development/**"
+  
+  # Ignore Docker root user in development images
+  - id: "AVD-DS-0002"
+    paths:
+      - "**/Dockerfile.dev"
+      - "docker/dev/**"

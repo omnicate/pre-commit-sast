@@ -2,16 +2,14 @@
 repos:
   # SAST: Configuration
   - repo: https://github.com/jonny-wg2/pre-commit-sast
-    rev: v0.0.1
+    rev: v0.0.3
     hooks:
       - id: trivyconfig
         args:
           - "--args=--severity HIGH,CRITICAL"
-          - "--args=--ignorefile .trivyignore"
-
   # SAST: Semgrep
   - repo: https://github.com/returntocorp/semgrep
-    rev: v1.23.0
+    rev: v1.137.0
     hooks:
       - id: semgrep
         name: "SAST:semgrep-ci (exclude findings with commenting) [# nosemgrep]"
@@ -35,9 +33,12 @@ repos:
             dockerfile,
           ]
         stages: [commit]
-
   # SAST: Erlang Pest https://github.com/okeuday/pest
   - repo: https://github.com/omnicate/pre-commit-erlang-pest
     rev: v1.0.4
     hooks:
       - id: pest
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.18
+    hooks:
+      - id: shellcheck

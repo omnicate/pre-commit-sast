@@ -32,22 +32,31 @@ then
     echo "Running with TRIVY_ARGS: ${TRIVY_ARGS}"
 fi
 
+# Apply ionice if available (Linux only) and not already running under it
 if [[ -z "${IONICE_RUNNING}" ]] && command -v ionice >/dev/null 2>&1; then
-    # Set the flag and re-execute under ionice
     export IONICE_RUNNING=1
     exec env TRIVY_ARGS="$TRIVY_ARGS" ionice -c 2 -n 7 "$0" "$@"
 fi
 
+# Auto-detect ignore files only if not already specified
+if [[ "$TRIVY_ARGS" != *"--ignorefile"* ]]; then
+    if [[ -f ".trivyignore.yaml" ]]; then
+        TRIVY_ARGS+=" --ignorefile .trivyignore.yaml"
+    elif [[ -f ".trivyignore" ]]; then
+        TRIVY_ARGS+=" --ignorefile .trivyignore"
+    fi
+fi
+
 OVERALL_EXIT_STATUS=0
 
-# Ensure the cache is valid and clear it if not
-# See also: https://iot-controlcenter.atlassian.net/browse/INF-481
-if ! [[ -e "${HOME}/.cache/trivy/policy/content" ]]
-then
+# Ensure the cache is valid and clear it if corrupted
+# This handles the case where ~/.cache/trivy exists but policy/content is missing
+if [[ -d "${HOME}/.cache/trivy" ]] && ! [[ -d "${HOME}/.cache/trivy/policy/content" ]]; then
+    echo "Detected corrupted Trivy cache, cleaning..."
     trivy clean --all
 fi
 
-# Remaining arguments are treated as files
+# Run individual file scans (trivy conf doesn't support batch scanning)
 for file in "$@"; do
     if [[ -f "$file" ]]; then
         echo "Scanning file: $file"

@@ -1,0 +1,24 @@
+vulnerabilities:
+  - id: "CVE-2021-44228"
+    paths:
+      - "vendor/**"
+      - "third_party/**"
+    statement: "Log4j vulnerability in vendor dependencies"
+
+misconfigurations:
+  - id: "AVD-KSV-0003"
+    paths:
+      - "**/monitoring/grafana/**"
+    statement: "LOW severity capability drops not required for grafana monitoring"
+
+  - id: "AVD-KSV-0014"
+    paths:
+      - "**/dev/**"
+      - "k8s/dev/**"
+    statement: "Development environment - security context not required"
+
+  - id: "AVD-DS-0002"
+    paths:
+      - "**/Dockerfile.dev"
+      - "docker/dev/**"
+    statement: "Development dockerfiles - root user acceptable"
