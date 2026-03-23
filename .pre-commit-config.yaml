@@ -2,12 +2,12 @@
 repos:
   # SAST: Configuration
   - repo: https://github.com/jonny-wg2/pre-commit-sast
-    rev: d2a8229042fbfb25c79514a075d8f1b029c157d1
+    rev: bf2ab7d452c8557b5be44dabe25d09946a785d4e
     hooks:
       - id: trivyconfig
         args:
           - "--args=--severity HIGH,CRITICAL"
-      # - id: validate-pre-commit-revs
+      - id: validate-pre-commit-revs
   # SAST: Semgrep
   - repo: https://github.com/returntocorp/semgrep
     rev: 8b4b26313328afdbbb30470cc09d3b7de643e7e6

@@ -16,7 +16,7 @@ SHA. This prevents floating tags and short SHAs in `.pre-commit-config.yaml`.
 
 ```yaml
 - repo: https://github.com/jonny-wg2/pre-commit-sast
-  rev: d2a8229042fbfb25c79514a075d8f1b029c157d1
+  rev: bf2ab7d452c8557b5be44dabe25d09946a785d4e
   hooks:
     - id: validate-pre-commit-revs
 ```
