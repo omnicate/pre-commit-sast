@@ -5,3 +5,11 @@
   language: script
   types_or: [yaml, json, dockerfile, terraform]
   require_serial: true # Prevent cache corruption from concurrent scans, runs a single trivy invocation per file
+
+- id: validate-pre-commit-revs
+  name: Validate pre-commit revs
+  description: "Require remote pre-commit repos to pin rev to a full 40-character git SHA."
+  entry: validate-pre-commit-revs
+  language: golang
+  files: ^\.pre-commit-config\.yaml$
+  pass_filenames: false

@@ -2,6 +2,28 @@
 
 Repo containing hooks for SAST tools. Check out `.pre-commit-config.yaml` for additional SAST tools.
 
+## Validate pre-commit revs
+
+Require remote pre-commit repos to pin `rev` to a full 40-character git
+SHA. This prevents floating tags and short SHAs in `.pre-commit-config.yaml`.
+
+### Rules
+
+- Remote repos must use a 40-character lowercase git SHA in `rev`
+- `repo: local` and `repo: meta` are exempt and must not define `rev`
+
+### Usage
+
+```yaml
+- repo: https://github.com/jonny-wg2/pre-commit-sast
+  rev: bf2ab7d452c8557b5be44dabe25d09946a785d4e
+  hooks:
+    - id: validate-pre-commit-revs
+```
+
+This hook runs the shared Go implementation from this repository.
+It is packaged as a `golang` pre-commit hook.
+
 ## Trivy
 
 Trivy configuration scanner with batch scanning for improved reliability.
@@ -16,7 +38,7 @@ Trivy configuration scanner with batch scanning for improved reliability.
 
 ```yaml
 - repo: https://github.com/jonny-wg2/pre-commit-sast
-  rev: v0.0.3
+  rev: d2a8229042fbfb25c79514a075d8f1b029c157d1
   hooks:
     - id: trivyconfig
       args:
