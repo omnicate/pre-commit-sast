@@ -2,7 +2,7 @@
 repos:
   # SAST: Configuration
   - repo: https://github.com/jonny-wg2/pre-commit-sast
-    rev: bf2ab7d452c8557b5be44dabe25d09946a785d4e
+    rev: fad9f0cc4135afcb221e39ec77b21fb50336e322
     hooks:
       - id: trivyconfig
         args:

@@ -39,7 +39,7 @@ Trivy configuration scanner with batch scanning for improved reliability.
 
 ```yaml
 - repo: https://github.com/jonny-wg2/pre-commit-sast
-  rev: d2a8229042fbfb25c79514a075d8f1b029c157d1
+  rev: fad9f0cc4135afcb221e39ec77b21fb50336e322
   hooks:
     - id: trivyconfig
       args:
