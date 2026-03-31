@@ -21,8 +21,9 @@ SHA. This prevents floating tags and short SHAs in `.pre-commit-config.yaml`.
     - id: validate-pre-commit-revs
 ```
 
-This hook runs the shared Go implementation from this repository.
-It is packaged as a `golang` pre-commit hook.
+This hook is a lightweight bash script that auto-downloads
+[`yq`](https://github.com/mikefarah/yq) to `~/.cache/pre-commit-sast/bin/`
+on first run (no manual installation required).
 
 ## Trivy
 

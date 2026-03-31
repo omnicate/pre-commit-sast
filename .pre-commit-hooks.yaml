@@ -9,7 +9,7 @@
 - id: validate-pre-commit-revs
   name: Validate pre-commit revs
   description: "Require remote pre-commit repos to pin rev to a full 40-character git SHA."
-  entry: validate-pre-commit-revs
-  language: golang
+  entry: hooks/validate-pre-commit-revs.sh
+  language: script
   files: ^\.pre-commit-config\.yaml$
   pass_filenames: false
